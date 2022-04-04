@@ -1,0 +1,15 @@
+{
+    "name": "pc_gb/mvc_framework",
+    "autoload": {
+        "psr-4": {
+            "app\\": "./"
+        }
+    },
+    "authors": [
+        {
+            "name": "muhiteng",
+            "email": "muh.it.eng.19841984@gmail.com"
+        }
+    ],
+    "require": {}
+}
