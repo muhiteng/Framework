@@ -1,22 +1,33 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
-use app\core\Application;
-use app\controllers\SiteController;
-use app\controllers\AuthController;
 
+use app\core\Application;
+use app\controllers\AuthController; 
+use app\controllers\RolesPermissionsController;
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+$dotenv->safeLoad();
 
 $app= new Application(dirname(__DIR__));
 
-$app->router->get('/', [SiteController::class,'home']);
-//$app->router->get('/', function(){return 'Hello';});
-//$app->router->get('/contact', function(){return 'contact';});
-//$app->router->get('/contact',  'Contact');
-$app->router->get('/contact',  [SiteController::class,'Contact']);
-$app->router->post('/contact', [SiteController::class,'handleContact']);
-
-$app->router->get('/login', [AuthController::class,'login']);
-$app->router->post('/login', [AuthController::class,'login']);
-
-$app->router->get('/register', [AuthController::class,'register']);
+$app->router->post('/login', [AuthController::class,'login']);//->permissionmiddlware('role:admin');;
 $app->router->post('/register', [AuthController::class,'register']);
+
+// web means group of middlewares whick be default
+$app->router->get('/profile', [AuthController::class,'profile'])
+->middlware('auth')
+->rolemiddlware('role:user');
+
+$app->router->get('/roles', [RolesPermissionsController::class,'getAllRoles'])
+->middlware('auth')
+->rolemiddlware('role:user');
+
+$app->router->post('/roles_create', [RolesPermissionsController::class,'create'])
+->middlware('auth')
+->rolemiddlware('role:user');
+
+$app->router->post('/refresh', [AuthController::class,'refresh_token']);
+$app->router->post('/log_out', [AuthController::class,'log_out']);
+
 $app->run();

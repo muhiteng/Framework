@@ -1,7 +1,9 @@
 <?php
 namespace app\core;
 
-class Request
+use app\app\Requests\BaseRequest;
+
+class Request 
 {
     public function getPath()
     {
@@ -11,10 +13,10 @@ class Request
              return $path;
          }
        return  $path=substr($path,0,$position);
-         echo '<pre>';
+       /*  echo '<pre>';
          var_dump($position);
          echo '</pre>';
-         /**/
+         */
 
     }
     public function method()
